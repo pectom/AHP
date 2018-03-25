@@ -8,41 +8,18 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Representation {
-    private Criterion root;
-    private LinkedList<String> alternatives;
-
-    public Representation() {
-        root = new Criterion("Overall Satisfaction");
-        alternatives = new LinkedList<>();
-    }
+    private final Criterion root;
+    private final LinkedList<String> alternatives;
 
     public Representation(Criterion _root, LinkedList<String> _alternatives) {
         root = _root;
         alternatives = _alternatives;
     }
 
-    public Criterion getRoot() {
-        return root;
-    }
-
-    public LinkedList<String> getAlternatives() {
-        return alternatives;
-    }
-
-    public void createRepresentationFromXMLFile(String path){
-        RepresentationParser.parse(path);
-    }
-    public void create() throws FileNotFoundException {
-        RepresentationCreator creator = new RepresentationCreator();
-        Representation representation = creator.createRepresentation();
-        root = representation.getRoot();
-        alternatives = representation.getAlternatives();
-    }
 
     public void printAlternatives() {
         for (String alternative : alternatives) {
@@ -56,13 +33,13 @@ public class Representation {
         System.out.print("Representation: ");
         System.out.println(root.getName());
 
-        for (int i = 0; i < children.size(); i++) {
-            System.out.print(children.get(i).getName() + " ");
+        for (Criterion aChildren : children) {
+            System.out.print(aChildren.getName() + " ");
 
         }
         System.out.print("\n");
-        for (int i = 0; i < children.size(); i++) {
-            printChildren(children.get(i));
+        for (Criterion aChildren : children) {
+            printChildren(aChildren);
         }
     }
 
@@ -70,19 +47,19 @@ public class Representation {
         LinkedList<Criterion> children = criterion.getChildren();
 
         System.out.println(criterion.getName());
-        for (int i = 0; i < children.size(); i++) {
-            System.out.print(children.get(i).getName() + " ");
+        for (Criterion aChildren : children) {
+            System.out.print(aChildren.getName() + " ");
         }
         System.out.print("\n");
 
-        for (int i = 0; i < children.size(); i++) {
-            printChildren(children.get(i));
+        for (Criterion aChildren : children) {
+            printChildren(aChildren);
         }
 
     }
 
     public String createXMLFile() {
-        String path="";
+        String path = "";
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -94,17 +71,15 @@ public class Representation {
             addAlternatives(rootElement, doc);
 
             Element overall = doc.createElement("CRITERION");
-            overall.setAttribute("name", root.getName());
             overall.setAttribute("m", root.getMatrix().toString());
+            overall.setAttribute("name", root.getName());
             rootElement.appendChild(overall);
 
             addCriterions(root, overall, doc);
             path = saveXML(doc);
 
 
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
+        } catch (ParserConfigurationException | TransformerException e) {
             e.printStackTrace();
         }
         return path;
@@ -130,9 +105,9 @@ public class Representation {
     }
 
     private void addAlternatives(Element rootElement, Document doc) {
-        for (int i = 0; i < alternatives.size(); i++) {
+        for (String alternative1 : alternatives) {
             Element alternative = doc.createElement("CHOICE");
-            alternative.appendChild(doc.createTextNode(alternatives.get(i)));
+            alternative.appendChild(doc.createTextNode(alternative1));
             rootElement.appendChild(alternative);
         }
     }
@@ -141,7 +116,7 @@ public class Representation {
         for (int i = 0; i < parent.getChildren().size(); i++) {
             Element subCriterion = doc.createElement("CRITERION");
             subCriterion.setAttribute("name", parent.getChildren().get(i).getName());
-            subCriterion.setAttribute("matrix", parent.getChildren().get(i).getMatrix().toString());
+            subCriterion.setAttribute("m", parent.getChildren().get(i).getMatrix().toString());
             parentNode.appendChild(subCriterion);
             addCriterions(parent.getChildren().get(i), subCriterion, doc);
         }

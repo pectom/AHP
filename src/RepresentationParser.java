@@ -25,15 +25,11 @@ public class RepresentationParser {
             Element root = doc.getDocumentElement();
 
             parseRoot(root, doc);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
 
-        return new Representation(rootCriterion,alternatives);
+        return new Representation(rootCriterion, alternatives);
     }
 
     private static void parseRoot(Element root, Document doc) {
@@ -42,20 +38,18 @@ public class RepresentationParser {
 
 
         for (int i = 0; i < rootChildNodeList.getLength(); i++) {
-            if(rootChildNodeList.item(i).getNodeType() == Node.ELEMENT_NODE){
+            if (rootChildNodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element critertionNode = (Element) rootChildNodeList.item(i);
                 if (critertionNode.getTagName().equals("CRITERION")) {
-                    rootCriterion = new Criterion("Overall Satifaction");
+                    rootCriterion = new Criterion("Overall Satisfaction");
                     parseCriterion(critertionNode, rootCriterion);
                 }
             }
         }
         parseAlternatives(alterantiveNodeList);
-
-
     }
 
-    private static void parseCriterion(Element criterionElement,Criterion criterion) {
+    private static void parseCriterion(Element criterionElement, Criterion criterion) {
         Matrix matrix = new Matrix();
         LinkedList<Criterion> children = new LinkedList<>();
 
@@ -64,19 +58,19 @@ public class RepresentationParser {
         criterion.setMatrix(matrix);
         criterion.setChildren(children);
 
-        if(criterionElement.getChildNodes().getLength()!=0){
+        if (criterionElement.getChildNodes().getLength() != 0) {
 
 
             NodeList criterionChildNodeList = criterionElement.getChildNodes();
             for (int i = 0; i < criterionChildNodeList.getLength(); i++) {
-                if(criterionChildNodeList.item(i).getNodeType() == Node.ELEMENT_NODE){
+                if (criterionChildNodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     Element subcriterionElement = (Element) criterionChildNodeList.item(i);
 
                     Criterion subcriterion = new Criterion(subcriterionElement.getAttribute("name"));
                     subcriterion.setParent(criterion);
                     children.add(subcriterion);
 
-                    parseCriterion(subcriterionElement,subcriterion);
+                    parseCriterion(subcriterionElement, subcriterion);
                 }
             }
         }
@@ -85,7 +79,7 @@ public class RepresentationParser {
     private static void parseAlternatives(NodeList alternativesNodeList) {
         alternatives = new LinkedList<>();
         for (int i = 0; i < alternativesNodeList.getLength(); i++) {
-            if(alternativesNodeList.item(i).getNodeType() == Node.ELEMENT_NODE){
+            if (alternativesNodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element alternativeElement = (Element) alternativesNodeList.item(i);
                 alternatives.add(alternativeElement.getTextContent());
             }

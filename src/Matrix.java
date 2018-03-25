@@ -14,7 +14,8 @@ public class Matrix {
         matrix = new Double[size][size];
         for (int i = 0; i < size; i++) {
             String[] fields = rows[i].split(" ");
-            for (int j = 0; j<size; j++){
+            for (int j = 0; j < size; j++) {
+                System.out.println(fields[j] + " " + i + " " + j);
                 matrix[i][j] = Double.valueOf(fields[j]);
             }
         }
@@ -23,26 +24,27 @@ public class Matrix {
 
 
     public String toString() {
-        String matrixString = "";
+        StringBuilder matrixString = new StringBuilder();
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 if (j == (matrix.length - 1)) {
-                    matrixString += matrix[i][j];
+                    matrixString.append(matrix[i][j]);
                 } else {
-                    matrixString += matrix[i][j].toString() + " ";
+                    matrixString.append(matrix[i][j].toString()).append(" ");
                 }
             }
             if (i != (matrix.length - 1)) {
-                matrixString += "; ";
+                matrixString.append("; ");
             }
         }
 
-        return matrixString;
+        return matrixString.toString();
     }
 
     public Matrix createMatrixFromUserInput(LinkedList<String> names, Scanner scanner) {
         Integer size = names.size();
+        this.size = size;
         matrix = new Double[size][size];
         for (int i = 0; i < size; i++) {
             matrix[i][i] = 1.0;
@@ -74,13 +76,13 @@ public class Matrix {
                 scanner.nextLine();
                 if (value < 0) {
                     goodInput = false;
-                    System.out.println("Wrong input. You have to enter postitive Double.");
+                    System.out.println("Wrong input. You have to enter positive Double.");
                 } else {
                     goodInput = true;
                 }
             } catch (InputMismatchException e) {
                 scanner.nextLine();
-                System.out.println("Wrong input. You have to enter postitive Double.");
+                System.out.println("Wrong input. You have to enter positive Double.");
             }
         }
         return value;

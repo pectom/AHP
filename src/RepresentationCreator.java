@@ -3,31 +3,44 @@ import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class RepresentationCreator {
-    private Scanner scanner;
-    Criterion root;
-    LinkedList<String> alternatives;
-    PrintStream out;
-    InputStream in;
+class RepresentationCreator {
+    private static Scanner scanner;
+    private static Criterion root;
+    private static LinkedList<String> alternatives;
+    private static PrintStream out = System.out;
+    private static InputStream in = System.in;
 
-    public RepresentationCreator() throws FileNotFoundException {
-        root = new Criterion("Overall Satisfaction");
-        alternatives = new LinkedList<>();
-        in = new FileInputStream(new File("/home/tomasz/Pulpit/Studia/semestr 4/boitzo/AHP2/out/input"));
-        scanner = new Scanner(in);
-        out = new PrintStream(new FileOutputStream("/home/tomasz/Pulpit/Studia/semestr 4/boitzo/AHP2/out/output"));
-        System.setOut(out);
+    public static void setOut(String path) {
+        try {
+            RepresentationCreator.out = new PrintStream(new FileOutputStream(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public Representation createRepresentation() {
+    public static void setIn(String path) {
+        try {
+            RepresentationCreator.in = new FileInputStream(new File(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Representation create() {
+        root = new Criterion("Overall Satisfaction");
+        alternatives = new LinkedList<>();
+        scanner = new Scanner(in);
+        System.setOut(out);
+
         System.out.println("Hello in AHP-representation document creator.\n ");
         readAlternatives();
         readCriterions();
 
-        return new Representation(root,alternatives);
+        return new Representation(root, alternatives);
     }
 
-    private void readCriterions() {
+    private static void readCriterions() {
         LinkedList<Criterion> children = new LinkedList<>();
         Matrix matrix = new Matrix();
         Integer amountOfCriterions;
@@ -43,12 +56,12 @@ public class RepresentationCreator {
         root.setMatrix(matrix);
 
 
-        for (int i = 0; i < children.size(); i++) {
-            addCriterion(root, children.get(i));
+        for (Criterion aChildren : children) {
+            addCriterion(root, aChildren);
         }
     }
 
-    private void addCriterion(Criterion parent, Criterion criterion) {
+    private static void addCriterion(Criterion parent, Criterion criterion) {
         LinkedList<Criterion> children = new LinkedList<>();
         Matrix matrix = new Matrix();
 
@@ -70,14 +83,14 @@ public class RepresentationCreator {
             criterion.setMatrix(matrix);
             System.out.println(matrix.toString());
 
-            for (int i = 0; i < children.size(); i++) {
-                addCriterion(criterion, children.get(i));
+            for (Criterion aChildren : children) {
+                addCriterion(criterion, aChildren);
             }
         }
 
     }
 
-    private void readSubcriterions(Integer amountOfSubcriterions, LinkedList<Criterion> children, Matrix matrix) {
+    private static void readSubcriterions(Integer amountOfSubcriterions, LinkedList<Criterion> children, Matrix matrix) {
         LinkedList<String> subcriterionsNames = new LinkedList<>();
 
         System.out.println("Now enter their names: ");
@@ -91,13 +104,13 @@ public class RepresentationCreator {
         matrix.createMatrixFromUserInput(subcriterionsNames, scanner);
     }
 
-    private void leaf(Criterion criterion, Matrix matrix) {
+    private static void leaf(Criterion criterion, Matrix matrix) {
         System.out.println(criterion.getName() + " have no more subcriterions. Now in view of this criterion compare alternatives.");
         matrix.createMatrixFromUserInput(alternatives, scanner);
 
     }
 
-    private void readAlternatives() {
+    private static void readAlternatives() {
         alternatives = new LinkedList<>();
         Integer amountOfAlternatives;
 
@@ -110,7 +123,7 @@ public class RepresentationCreator {
         }
     }
 
-    private Integer positiveIntegerInput() {
+    private static Integer positiveIntegerInput() {
         Integer value = null;
         boolean goodInput = false;
         while (!goodInput) {
@@ -119,35 +132,35 @@ public class RepresentationCreator {
                 scanner.nextLine();
                 if (value < 0) {
                     goodInput = false;
-                    System.out.println("Wrong input. You have to enter postitive integer.");
+                    System.out.println("Wrong input. You have to enter positive integer.");
                 } else {
                     goodInput = true;
                 }
             } catch (InputMismatchException e) {
                 scanner.nextLine();
-                System.out.println("Wrong input. You have to enter postitive integer.");
+                System.out.println("Wrong input. You have to enter positive integer.");
             }
         }
         return value;
     }
 
-    private void printBranch(Criterion criterion) {
+    private static void printBranch(Criterion criterion) {
         Criterion parent = criterion.getParent();
         String criterionName = criterion.getName();
-        String ancestorsString = "";
-        String[] ancestorsTabel;
+        StringBuilder ancestorsString = new StringBuilder();
+        String[] ancestorsTable;
 
         System.out.println("\nThis is a branch connected with " + criterion.getName());
 
         while (parent != null) {
-            ancestorsString += parent.getName() + ":";
+            ancestorsString.append(parent.getName()).append(":");
             criterion = criterion.getParent();
             parent = criterion.getParent();
         }
-        ancestorsTabel = ancestorsString.split(":");
+        ancestorsTable = ancestorsString.toString().split(":");
 
-        for (int i = ancestorsTabel.length - 1; i >= 0; i--) {
-            System.out.print(ancestorsTabel[i] + " -> ");
+        for (int i = ancestorsTable.length - 1; i >= 0; i--) {
+            System.out.print(ancestorsTable[i] + " -> ");
         }
         System.out.print(criterionName + "\n");
     }

@@ -10,10 +10,6 @@ public class Criterion{
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Matrix getMatrix() {
         return matrix;
     }
@@ -38,21 +34,8 @@ public class Criterion{
         this.children = children;
     }
 
-    public Criterion(String name, Matrix matrix, Criterion parent, LinkedList<Criterion> children) {
-        this.name = name;
-
-        this.matrix = matrix;
-        this.parent = parent;
-        this.children = children;
-    }
-
-    public Criterion(String name, Matrix matrix, LinkedList<Criterion> children) {
-        this.name = name;
-        this.matrix = matrix;
-        this.children = children;
-    }
-
     public Criterion(String name) {
         this.name = name;
     }
+
 }

@@ -34,6 +34,9 @@ public class Representation {
         return alternatives;
     }
 
+    public void createRepresentationFromXMLFile(String path){
+        RepresentationParser.parse(path);
+    }
     public void create() throws FileNotFoundException {
         RepresentationCreator creator = new RepresentationCreator();
         Representation representation = creator.createRepresentation();
@@ -78,34 +81,36 @@ public class Representation {
 
     }
 
-    public void createXMLFile() {
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+    public String createXMLFile() {
+        String path="";
         try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.newDocument();
 
             Element rootElement = doc.createElement("ROOT");
             doc.appendChild(rootElement);
 
+            addAlternatives(rootElement, doc);
+
             Element overall = doc.createElement("CRITERION");
             overall.setAttribute("name", root.getName());
             overall.setAttribute("matrix", root.getMatrix().toString());
             rootElement.appendChild(overall);
 
-            addAlternatives(rootElement, doc);
             addCriterions(root, overall, doc);
-            saveXML(doc);
+            path = saveXML(doc);
 
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
-        }catch (TransformerException e){
+        } catch (TransformerException e) {
             e.printStackTrace();
         }
-
+        return path;
     }
 
-    private void saveXML(Document doc) throws TransformerException {
+    private String saveXML(Document doc) throws TransformerException {
         Scanner scanner = new Scanner(System.in);
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -121,6 +126,7 @@ public class Representation {
 
         transformer.transform(source, result);
         System.out.println("File saved!");
+        return path;
     }
 
     private void addAlternatives(Element rootElement, Document doc) {

@@ -48,7 +48,6 @@ public class RepresentationCreator {
         }
     }
 
-
     private void addCriterion(Criterion parent, Criterion criterion) {
         LinkedList<Criterion> children = new LinkedList<>();
         Matrix matrix = new Matrix();
@@ -89,15 +88,14 @@ public class RepresentationCreator {
             children.add(child);
             subcriterionsNames.add(subName);
         }
-        matrix.createMatrix(subcriterionsNames, scanner);
+        matrix.createMatrixFromUserInput(subcriterionsNames, scanner);
     }
 
     private void leaf(Criterion criterion, Matrix matrix) {
         System.out.println(criterion.getName() + " have no more subcriterions. Now in view of this criterion compare alternatives.");
-        matrix.createMatrix(alternatives, scanner);
+        matrix.createMatrixFromUserInput(alternatives, scanner);
 
     }
-
 
     private void readAlternatives() {
         alternatives = new LinkedList<>();

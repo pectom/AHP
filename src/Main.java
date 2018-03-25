@@ -5,5 +5,6 @@ public class Main {
         Representation test = new Representation();
         test.create();
         test.printRepresentation();
+        test.createXMLFile();
     }
 }

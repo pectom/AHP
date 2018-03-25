@@ -6,7 +6,6 @@ public class Matrix {
     private Integer size;
 
 
-
     public String toString(){
         String matrixString ="";
 
@@ -26,17 +25,18 @@ public class Matrix {
         return matrixString;
     }
 
-    public void createMatrix(LinkedList<String> names, Scanner scanner) {
+    public Matrix createMatrix(LinkedList<String> names, Scanner scanner) {
         Integer size = names.size();
-        Double[][] tab = new Double[size][size];
+        matrix = new Double[size][size];
         for (int i = 0;i <size;i++){
-            tab[i][i] = 1.0;
+            matrix[i][i] = 1.0;
             for (int j=i+1;j<size;j++){
                 System.out.println("How many times "+ names.get(i) + " is more important/better than " + names.get(j));
                 Double ratio = scanner.nextDouble();
-                tab[i][j] = ratio;
-                tab[j][i] = 1/ratio;
+                matrix[i][j] = ratio;
+                matrix[j][i] = 1/ratio;
             }
         }
+        return this;
     }
 }

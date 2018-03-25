@@ -10,20 +10,21 @@ public class RepresentationCreator {
     PrintStream out;
     InputStream in;
 
-    public RepresentationCreator(Criterion _root, LinkedList<String> _alternatives) throws FileNotFoundException {
-        root = _root;
-        alternatives = _alternatives;
+    public RepresentationCreator() throws FileNotFoundException {
+        root = new Criterion("Overall Satisfaction");
+        alternatives = new LinkedList<>();
         in = new FileInputStream(new File("/home/tomasz/Pulpit/Studia/semestr 4/boitzo/AHP2/out/input"));
         scanner = new Scanner(in);
         out = new PrintStream(new FileOutputStream("/home/tomasz/Pulpit/Studia/semestr 4/boitzo/AHP2/out/output"));
         System.setOut(out);
     }
 
-    public void run() {
+    public Representation createRepresentation() {
         System.out.println("Hello in AHP-representation document creator.\n ");
         readAlternatives();
         readCriterions();
-        //printRepresentation();
+
+        return new Representation(root,alternatives);
     }
 
     private void readCriterions() {
@@ -68,6 +69,7 @@ public class RepresentationCreator {
             readSubcriterions(amountOfSubcriterions, children, matrix);
             criterion.setChildren(children);
             criterion.setMatrix(matrix);
+            System.out.println(matrix.toString());
 
             for (int i = 0; i < children.size(); i++) {
                 addCriterion(criterion, children.get(i));
@@ -151,35 +153,4 @@ public class RepresentationCreator {
         }
         System.out.print(criterionName + "\n");
     }
-
-  /*  public void printRepresentation() {
-        LinkedList<Criterion> children = root.getChildren();
-        System.out.print("Representation: ");
-        System.out.println(root.getName());
-
-        for (int i = 0; i < children.size(); i++){
-            System.out.print(children.get(i).getName()+" ");
-        }
-        System.out.print("\n");
-        for (int i = 0; i < children.size(); i++){
-            printChildren(children.get(i));
-        }
-    }
-
-    private void printChildren(Criterion criterion) {
-        LinkedList<Criterion> children = criterion.getChildren();
-
-        System.out.println(criterion.getName());
-        if(!children.equals(null)){
-            for (int i = 0; i < children.size(); i++){
-                System.out.print(children.get(i).getName()+" ");
-            }
-            System.out.print("\n");
-
-            for (int i = 0; i < children.size(); i++){
-                printChildren(children.get(i));
-            }
-        }
-
-    }*/
 }

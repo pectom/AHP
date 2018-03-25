@@ -95,7 +95,7 @@ public class Representation {
 
             Element overall = doc.createElement("CRITERION");
             overall.setAttribute("name", root.getName());
-            overall.setAttribute("matrix", root.getMatrix().toString());
+            overall.setAttribute("m", root.getMatrix().toString());
             rootElement.appendChild(overall);
 
             addCriterions(root, overall, doc);

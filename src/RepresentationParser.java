@@ -59,7 +59,7 @@ public class RepresentationParser {
         Matrix matrix = new Matrix();
         LinkedList<Criterion> children = new LinkedList<>();
 
-        matrix = matrix.createMatrixFromString(criterionElement.getAttribute("matrix"));
+        matrix = matrix.createMatrixFromString(criterionElement.getAttribute("m"));
 
         criterion.setMatrix(matrix);
         criterion.setChildren(children);

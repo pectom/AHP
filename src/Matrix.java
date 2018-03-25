@@ -9,7 +9,7 @@ public class Matrix {
     private Integer size;
 
     public Matrix createMatrixFromString(String matrixString) {
-        String[] rows = matrixString.split(";");
+        String[] rows = matrixString.split("; ");
         size = rows.length;
         matrix = new Double[size][size];
         for (int i = 0; i < size; i++) {
@@ -34,7 +34,7 @@ public class Matrix {
                 }
             }
             if (i != (matrix.length - 1)) {
-                matrixString += ";";
+                matrixString += "; ";
             }
         }
 

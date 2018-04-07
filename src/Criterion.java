@@ -1,10 +1,14 @@
+import java.lang.reflect.Array;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Criterion{
     private final String name;
     private Matrix matrix;
     private Criterion parent;
     private LinkedList<Criterion> children = new LinkedList<>();
+    private LinkedList<Double> priorityVector = new LinkedList<>();
+    private LinkedList<Double> weightsVector = new LinkedList<>();
 
     public String getName() {
         return name;
@@ -38,4 +42,19 @@ public class Criterion{
         this.name = name;
     }
 
+    public void setPriorityVector(LinkedList<Double> priorityVector) {
+        this.priorityVector = priorityVector;
+    }
+
+    public void setWeightsVector(LinkedList<Double> weightsVector) {
+        this.weightsVector = weightsVector;
+    }
+
+    public LinkedList<Double> getWeightsVector() {
+        return weightsVector;
+    }
+
+    public LinkedList<Double> getPriorityVector() {
+        return priorityVector;
+    }
 }

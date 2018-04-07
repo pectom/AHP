@@ -28,8 +28,11 @@ public class RepresentationParser {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
+        String[] pathTable = path.split("/");
+        String fileName = pathTable[pathTable.length-1];
+        String name = fileName.substring(0,fileName.length()-4);
 
-        return new Representation(rootCriterion, alternatives);
+        return new Representation(rootCriterion, alternatives,name);
     }
 
     private static void parseRoot(Element root, Document doc) {

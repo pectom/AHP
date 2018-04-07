@@ -14,10 +14,12 @@ import java.util.Scanner;
 public class Representation {
     private final Criterion root;
     private final LinkedList<String> alternatives;
+    String name;
 
-    public Representation(Criterion _root, LinkedList<String> _alternatives) {
+    public Representation(Criterion _root, LinkedList<String> _alternatives, String _name) {
         root = _root;
         alternatives = _alternatives;
+        name  = _name;
     }
 
 
@@ -95,7 +97,7 @@ public class Representation {
 
         System.out.println("Give the name of XML file where you want to save your data");
         String filename = scanner.nextLine();
-        String path = "/home/tomasz/Pulpit/Studia/semestr 4/boitzo/AHP2/out/" + filename + ".xml";
+        String path = "./out/" + filename + ".xml";
         StreamResult result = new StreamResult(new File(path));
 
 
@@ -124,4 +126,15 @@ public class Representation {
     }
 
 
+    public Criterion getRoot() {
+        return root;
+    }
+
+    public LinkedList<String> getAlternatives() {
+        return alternatives;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

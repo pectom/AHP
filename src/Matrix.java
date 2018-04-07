@@ -15,7 +15,6 @@ public class Matrix {
         for (int i = 0; i < size; i++) {
             String[] fields = rows[i].split(" ");
             for (int j = 0; j < size; j++) {
-                System.out.println(fields[j] + " " + i + " " + j);
                 matrix[i][j] = Double.valueOf(fields[j]);
             }
         }
@@ -88,4 +87,11 @@ public class Matrix {
         return value;
     }
 
+    public Integer getSize() {
+        return size;
+    }
+
+    public Double[][] getMatirx() {
+        return matrix;
+    }
 }

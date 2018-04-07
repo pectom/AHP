@@ -28,6 +28,8 @@ class RepresentationCreator {
     }
 
     public static Representation create() {
+        System.out.println("Enter the name of the representation");
+        String name = scanner.nextLine();
         root = new Criterion("Overall Satisfaction");
         alternatives = new LinkedList<>();
         scanner = new Scanner(in);
@@ -37,7 +39,7 @@ class RepresentationCreator {
         readAlternatives();
         readCriterions();
 
-        return new Representation(root, alternatives);
+        return new Representation(root, alternatives,name);
     }
 
     private static void readCriterions() {

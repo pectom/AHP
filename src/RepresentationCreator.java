@@ -28,14 +28,15 @@ class RepresentationCreator {
     }
 
     public static Representation create() {
-        System.out.println("Enter the name of the representation");
-        String name = scanner.nextLine();
-        root = new Criterion("Overall Satisfaction");
-        alternatives = new LinkedList<>();
         scanner = new Scanner(in);
         System.setOut(out);
 
-        System.out.println("Hello in AHP-representation document creator.\n ");
+        System.out.println("Enter the name of the representation");
+        String name;
+        name = scanner.nextLine();
+        root = new Criterion("Overall Satisfaction");
+        alternatives = new LinkedList<>();
+
         readAlternatives();
         readCriterions();
 

@@ -24,17 +24,21 @@ public class Representation {
 
 
     public void printAlternatives() {
+        System.out.println("List of alternatives: ");
         for (String alternative : alternatives) {
             System.out.println(alternative);
         }
     }
 
     public void printRepresentation() {
+        System.out.print("Representation: ");
+        System.out.println(name+"\n");
+
         printAlternatives();
         LinkedList<Criterion> children = root.getChildren();
-        System.out.print("Representation: ");
-        System.out.println(root.getName());
 
+
+        System.out.println("\nMain criterions:");
         for (Criterion aChildren : children) {
             System.out.print(aChildren.getName() + " ");
 

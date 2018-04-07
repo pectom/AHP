@@ -6,7 +6,7 @@ public class Calculator {
     private static Representation representation;
     private static Queue<Criterion> queue = new LinkedList<>();
 
-    private static enum Method {GMM, MM}
+    private enum Method {GMM, MM}
 
     private static Integer numeberOfAlternatives;
 

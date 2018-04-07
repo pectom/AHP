@@ -73,7 +73,7 @@ public class Matrix {
             try {
                 value = scanner.nextDouble();
                 scanner.nextLine();
-                if (value < 0) {
+                if (value <= 0) {
                     goodInput = false;
                     System.out.println("Wrong input. You have to enter positive Double.");
                 } else {

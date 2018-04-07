@@ -67,11 +67,8 @@ public class Main {
             System.out.println("Print gmm or evm");
             method = scanner.nextLine();
         }
-        if(method.equalsIgnoreCase("gmm")){
-            Calculator.geometricMeanMethod(representationToCompute);
-        }else {
-            Calculator.geometricMeanMethod(representationToCompute);
-        }
+        Calculator.findAlternative(representationToCompute,method);
+
     }
     private static void createRepresentation(){
         representations.add(RepresentationCreator.create());

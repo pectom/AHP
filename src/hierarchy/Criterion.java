@@ -1,6 +1,6 @@
-import java.lang.reflect.Array;
+package hierarchy;
+
 import java.util.LinkedList;
-import java.util.List;
 
 public class Criterion{
     private final String name;

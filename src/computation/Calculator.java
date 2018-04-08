@@ -1,3 +1,8 @@
+package computation;
+
+import hierarchy.Criterion;
+import hierarchy.Matrix;
+import hierarchy.Representation;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.EigenDecomposition;

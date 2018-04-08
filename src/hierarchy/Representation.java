@@ -1,3 +1,6 @@
+package hierarchy;
+
+import hierarchy.Criterion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -31,14 +34,14 @@ public class Representation {
     }
 
     public void printRepresentation() {
-        System.out.print("Representation: ");
+        System.out.print("hierarchy.Representation: ");
         System.out.println(name+"\n");
 
         printAlternatives();
         LinkedList<Criterion> children = root.getChildren();
 
 
-        System.out.println("\nMain criterions:");
+        System.out.println("\nexecution.Main criterions:");
         for (Criterion aChildren : children) {
             System.out.print(aChildren.getName() + " ");
 

@@ -1,8 +1,10 @@
+import org.rosuda.JRI.REXP;
 import org.rosuda.JRI.Rengine;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.stream.Stream;
 
 public class Calculator {
     private static Representation representation;
@@ -47,10 +49,45 @@ public class Calculator {
 
     private static void estimateWeightsVectorWithEVM(Criterion criterion) {
         Rengine re=new Rengine (new String [] {"--vanilla"}, false, null);
+        Double[][] matrix = criterion.getMatrix().getMatirx();
+        double[][] tempArray = new double[matrix.length][matrix.length];
         if (!re.waitForR())
         {
             System.out.println ("Cannot load R");
             return;
+        }else{
+            String matrixString = "";
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("s=cbind(");
+
+
+            for(int i=0;i<matrix.length;i++) {
+                for (int j = 0; j < matrix.length; j++) {
+                    tempArray[i][j] = matrix[i][j];
+                }
+            }
+
+            for(int i=0;i<matrix.length;i++){
+                String name = "m"+i;
+                System.out.println(name);
+                re.assign(name,tempArray[i]);
+
+                stringBuilder.append(name);
+                if(i<matrix.length-1){
+                    stringBuilder.append(",");
+                }
+            }
+            stringBuilder.append(")");
+            matrixString = stringBuilder.toString();
+            System.out.println(matrixString);
+            re.eval(matrixString);
+            re.eval("ev=eigen(s)");
+            re.eval("maxVal=max(ev$values)");
+
+            re.eval("maxIndex=match(maxVal,ev$values)");
+            re.eval("maxVector=ev$vectors[,1]");
+            double[] value = re.eval("maxVector").asDoubleArray();
+            System.out.println(value[0]);
         }
 
         // print a random number from uniform distribution

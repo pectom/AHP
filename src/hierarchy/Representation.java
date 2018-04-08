@@ -22,7 +22,7 @@ public class Representation {
     public Representation(Criterion _root, LinkedList<String> _alternatives, String _name) {
         root = _root;
         alternatives = _alternatives;
-        name  = _name;
+        name = _name;
     }
 
 
@@ -35,7 +35,7 @@ public class Representation {
 
     public void printRepresentation() {
         System.out.print("hierarchy.Representation: ");
-        System.out.println(name+"\n");
+        System.out.println(name + "\n");
 
         printAlternatives();
         LinkedList<Criterion> children = root.getChildren();

@@ -2,7 +2,7 @@ package hierarchy;
 
 import java.util.LinkedList;
 
-public class Criterion{
+public class Criterion {
     private final String name;
     private Matrix matrix;
     private Criterion parent;

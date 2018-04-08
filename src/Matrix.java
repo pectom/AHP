@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Matrix {
-    private Double[][] matrix;
+    private double[][] matrix;
     private Integer size;
 
     public Matrix createMatrixFromString(String matrixString) {
         String[] rows = matrixString.split("; ");
         size = rows.length;
-        matrix = new Double[size][size];
+        matrix = new double[size][size];
         for (int i = 0; i < size; i++) {
             String[] fields = rows[i].split(" ");
             for (int j = 0; j < size; j++) {
@@ -30,7 +30,7 @@ public class Matrix {
                 if (j == (matrix.length - 1)) {
                     matrixString.append(matrix[i][j]);
                 } else {
-                    matrixString.append(matrix[i][j].toString()).append(" ");
+                    matrixString.append(matrix[i][j]).append(" ");
                 }
             }
             if (i != (matrix.length - 1)) {
@@ -44,7 +44,7 @@ public class Matrix {
     public Matrix createMatrixFromUserInput(LinkedList<String> names, Scanner scanner) {
         Integer size = names.size();
         this.size = size;
-        matrix = new Double[size][size];
+        matrix = new double[size][size];
         for (int i = 0; i < size; i++) {
             matrix[i][i] = 1.0;
             for (int j = i + 1; j < size; j++) {
@@ -91,7 +91,7 @@ public class Matrix {
         return size;
     }
 
-    public Double[][] getMatirx() {
+    public double[][] getMatirx() {
         return matrix;
     }
 }

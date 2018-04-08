@@ -1,10 +1,11 @@
-import org.rosuda.JRI.REXP;
-import org.rosuda.JRI.Rengine;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.EigenDecomposition;
+import org.apache.commons.math3.linear.RealVector;
 
-import java.util.Collections;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Queue;
-import java.util.stream.Stream;
 
 public class Calculator {
     private static Representation representation;
@@ -18,13 +19,20 @@ public class Calculator {
         representation = rep;
         numeberOfAlternatives = rep.getAlternatives().size();
         Criterion root = rep.getRoot();
-        if(method.equalsIgnoreCase("gmm")){
+        if (method.equalsIgnoreCase("gmm")) {
             estimateWeightsVectors(Method.GMM);
-        } else{
+        } else {
             estimateWeightsVectors(Method.EVM);
         }
         estimatePriorityVector(root);
+        System.out.println("This is a priority vector for this hierarchy:");
         System.out.println(root.getPriorityVector().toString());
+        int maxIndex= 0;
+        for(int i=0;i<root.getPriorityVector().size();i++){
+            maxIndex = root.getPriorityVector().get(i) > root.getPriorityVector().get(maxIndex) ? i : maxIndex;
+        }
+        System.out.println("The best alternative is "+representation.getAlternatives().get(maxIndex)+".\n");
+
     }
 
     private static void estimateWeightsVectors(Method method) {
@@ -48,64 +56,37 @@ public class Calculator {
     }
 
     private static void estimateWeightsVectorWithEVM(Criterion criterion) {
-        Rengine re=new Rengine (new String [] {"--vanilla"}, false, null);
-        Double[][] matrix = criterion.getMatrix().getMatirx();
-        double[][] tempArray = new double[matrix.length][matrix.length];
-        if (!re.waitForR())
-        {
-            System.out.println ("Cannot load R");
-            return;
-        }else{
-            String matrixString = "";
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("s=cbind(");
-
-
-            for(int i=0;i<matrix.length;i++) {
-                for (int j = 0; j < matrix.length; j++) {
-                    tempArray[i][j] = matrix[i][j];
-                }
-            }
-
-            for(int i=0;i<matrix.length;i++){
-                String name = "m"+i;
-                System.out.println(name);
-                re.assign(name,tempArray[i]);
-
-                stringBuilder.append(name);
-                if(i<matrix.length-1){
-                    stringBuilder.append(",");
-                }
-            }
-            stringBuilder.append(")");
-            matrixString = stringBuilder.toString();
-            System.out.println(matrixString);
-            re.eval(matrixString);
-            re.eval("ev=eigen(s)");
-            re.eval("maxVal=max(ev$values)");
-
-            re.eval("maxIndex=match(maxVal,ev$values)");
-            re.eval("maxVector=ev$vectors[,1]");
-            double[] value = re.eval("maxVector").asDoubleArray();
-            System.out.println(value[0]);
+        Array2DRowRealMatrix matrix = new Array2DRowRealMatrix(criterion.getMatrix().getMatirx());
+        EigenDecomposition decomposition = new EigenDecomposition(matrix);
+        double[] eigenValues = decomposition.getRealEigenvalues();
+        int maxIndex=0;
+        for (int i = 0; i < eigenValues.length; i++) {
+            maxIndex = eigenValues[i] > eigenValues[maxIndex] ? i : maxIndex;
         }
+        RealVector eigenVector = decomposition.getEigenvector(maxIndex);
+        LinkedList<Double>  weightsVector=new LinkedList<>();
 
-        // print a random number from uniform distribution
-        System.out.println (re.eval ("runif(1)").asDouble ());
-
-        // done...
-        re.end();
-
+        int size = eigenVector.getDimension();
+        Double sum = 0.0;
+        for (int i =0;i<size;i++) {
+          sum += eigenVector.getEntry(i);
+        }
+        Double multiplier = 1.0/sum;
+        eigenVector.mapMultiplyToSelf(multiplier);
+        for (int i =0;i<size;i++) {
+            weightsVector.add(eigenVector.getEntry(i));
+        }
+        criterion.setWeightsVector(weightsVector);
     }
 
     private static void estimateWeightsVectorWithGMM(Criterion criterion) {
         LinkedList<Double> weightsVector = new LinkedList<>();
         Matrix matrix = criterion.getMatrix();
-        Double[][] matrixValues = matrix.getMatirx();
+        double[][] matrixValues = matrix.getMatirx();
         Integer matrixSize = matrix.getSize();
         Double product = 1.0;
         Double vectorElement;
-        Double vectorSum  = 0.0;
+        Double vectorSum = 0.0;
 
         for (int i = 0; i < matrixSize; i++) {
             product = 1.0;
@@ -114,12 +95,12 @@ public class Calculator {
             }
             vectorElement = Math.pow(product, 1.0 / matrixSize.doubleValue());
             weightsVector.add(vectorElement);
-            vectorSum+=vectorElement;
+            vectorSum += vectorElement;
 
         }
-        for (int i = 0;i<weightsVector.size();i++) {
+        for (int i = 0; i < weightsVector.size(); i++) {
             Double value = weightsVector.get(i);
-            weightsVector.set(i,value/vectorSum);
+            weightsVector.set(i, value / vectorSum);
         }
         criterion.setWeightsVector(weightsVector);
 

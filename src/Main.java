@@ -1,18 +1,30 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner =  new Scanner(System.in);
+/*
+    static {
+        try {
+            scanner = new Scanner(new FileInputStream(new File("./out/in")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+*/
     private static List<Representation> representations = new LinkedList<>();
     public static void main(String[] args) throws FileNotFoundException {
 
         Representation test1 = RepresentationParser.parse("./out/daneauta.xml");
         Representation test2 = RepresentationParser.parse("./out/nowy.xml");
+        Representation test3 = RepresentationParser.parse("./out/mini.xml");
         representations.add(test1);
         representations.add(test2);
+        representations.add(test3);
         boolean exit = false;
         System.out.println("Welcome in my AHP application.");
         System.out.println("Input a number to do selected action.\n");

@@ -26,13 +26,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        representations.add(RepresentationParser.parse("./out/auto.xml"));
-        representations.add(RepresentationParser.parse("./out/plik2.xml"));
-        representations.add(RepresentationParser.parse("./out/dataKleszcza1.xml"));
-        representations.add(RepresentationParser.parse("./out/dataKleszcza2.xml"));
-        representations.add(RepresentationParser.parse("./out/wycieczka.xml"));
-        representations.add(RepresentationParser.parse("./out/najnowszy.xml"));
-        representations.add(RepresentationParser.parse("./out/madzialac.xml"));
+        //representations.add(RepresentationParser.parse("./out/auto.xml"));
+        //representations.add(RepresentationParser.parse("./out/plik2.xml"));
+        //representations.add(RepresentationParser.parse("./out/dataKleszcza1.xml"));
+        //representations.add(RepresentationParser.parse("./out/dataKleszcza2.xml"));
+       // representations.add(RepresentationParser.parse("./out/wycieczka.xml"));
+        //representations.add(RepresentationParser.parse("./out/najnowszy.xml"));
+        //representations.add(RepresentationParser.parse("./out/madzialac.xml"));
         boolean exit = false;
         System.out.println("Welcome in my AHP application.");
         System.out.println("Input a number to do selected action.\n");
